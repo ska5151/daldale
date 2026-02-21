@@ -1,0 +1,270 @@
+:root {
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --secondary: #ec4899;
+  --bg-dark: #0f172a;
+  --bg-card: #1e293b;
+  --text-light: #f8fafc;
+  --text-dim: #94a3b8;
+  --font-main: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  line-height: 1.5;
+  font-weight: 400;
+  overflow-x: hidden;
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+  /* Remove tap highlight on mobile */
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+
+/* Dashboard Grid Layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Form Grid Layout */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card Styling */
+.card {
+  background-color: var(--bg-card);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card-title {
+  color: var(--text-light);
+  font-size: 1.2rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Expense List Item */
+.expense-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.expense-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.expense-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+  /* Prevent flex item from overflowing */
+}
+
+.expense-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.expense-details {
+  min-width: 0;
+  /* Text truncation depends on this */
+}
+
+.expense-name {
+  font-weight: 600;
+  color: var(--text-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1rem;
+}
+
+.expense-sub {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.expense-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-left: 1rem;
+}
+
+.expense-amount {
+  text-align: right;
+  font-weight: 700;
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    /* Stack cards */
+    gap: 1rem;
+  }
+
+  .card {
+    padding: 1.2rem;
+  }
+
+  .expense-item {
+    flex-direction: column;
+    /* Stack info and actions */
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.2rem;
+  }
+
+  .expense-info {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .expense-actions {
+    width: 100%;
+    justify-content: space-between;
+    /* Spread actions out */
+    margin-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .expense-amount {
+    font-size: 1.2rem;
+    /* Larger amount for readability */
+    order: -1;
+    /* Move amount before buttons in the actions row? No, keep it right side or top */
+  }
+
+  /* Let's actually restructure actions for mobile:
+       Amount on one side, buttons on the other?
+       Or Amount in the info section?
+    */
+
+  .expense-actions {
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+  }
+
+  /* Buttons full width or larger tap targets */
+  .btn-action {
+    padding: 0.8rem 1rem !important;
+    /* Larger touch area */
+  }
+}
+
+/* Settings Page Specifics */
+.settings-profile {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.settings-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.2s;
+  margin-bottom: 0.5rem;
+  /* Space between items if stacked or list */
+}
+
+.settings-input-group {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .settings-profile {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .settings-list-item {
+    /* flex-direction: column;  Maybe simpler to keep row but stack if too narrow? */
+    padding: 0.8rem;
+  }
+
+  .settings-input-group {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .settings-input-group button {
+    width: 100%;
+  }
+}
