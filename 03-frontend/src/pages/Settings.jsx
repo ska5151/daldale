@@ -86,8 +86,6 @@ const Settings = () => {
         <div>
             <h1 style={{ marginBottom: '1.5rem', color: 'var(--text-light)' }}>설정</h1>
 
-
-
             {/* Category Management Section */}
             <div className="card">
                 <h2 className="card-title">카테고리 관리</h2>
@@ -189,7 +187,98 @@ const Settings = () => {
                 </div>
             </div>
 
+            {/* Data Management Section */}
+            <div className="card" style={{ marginTop: '2rem' }}>
+                <h2 className="card-title">데이터 관리</h2>
+                <p style={{ color: 'var(--text-dim)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+                    앱의 모든 데이터를 백업하거나 이전에 백업한 데이터를 불러올 수 있습니다.
+                </p>
 
+                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                    <button
+                        className="btn btn-secondary"
+                        style={{ flex: 1, minWidth: '150px', background: 'rgba(255,255,255,0.1)', color: 'var(--text-light)' }}
+                        onClick={() => {
+                            const storeState = useStore.getState();
+                            const backupData = {
+                                expenses: storeState.expenses,
+                                expenseHistory: storeState.expenseHistory,
+                                categories: storeState.categories,
+                                paymentMethods: storeState.paymentMethods,
+                                userProfile: storeState.userProfile,
+                                exported_at: new Date().toISOString(),
+                                version: '1.0'
+                            };
+
+                            const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+                            const url = URL.createObjectURL(blob);
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.download = `daldale_backup_${new Date().toISOString().split('T')[0]}.json`;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            URL.revokeObjectURL(url);
+                        }}
+                    >
+                        데이터 백업 (JSON)
+                    </button>
+
+                    <label
+                        className="btn btn-primary"
+                        style={{ flex: 1, minWidth: '150px', cursor: 'pointer', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        데이터 복원 (JSON)
+                        <input
+                            type="file"
+                            accept=".json"
+                            style={{ display: 'none' }}
+                            onChange={(e) => {
+                                const file = e.target.files[0];
+                                if (!file) return;
+
+                                if (!window.confirm('데이터를 복원하시겠습니까? 현재 앱의 모든 데이터가 백업 데이터로 대체됩니다.')) {
+                                    e.target.value = '';
+                                    return;
+                                }
+
+                                const reader = new FileReader();
+                                reader.onload = (event) => {
+                                    try {
+                                        const json = JSON.parse(event.target.result);
+                                        if (!json.expenses || !json.categories) {
+                                            throw new Error('올바른 백업 파일 형식이 아닙니다.');
+                                        }
+
+                                        useStore.getState().restoreData(json);
+                                        alert('데이터가 성공적으로 복원되었습니다.');
+                                        window.location.reload();
+                                    } catch (err) {
+                                        alert('복원 실패: ' + err.message);
+                                    }
+                                };
+                                reader.readAsText(file);
+                                e.target.value = '';
+                            }}
+                        />
+                    </label>
+                </div>
+
+                <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                    <button
+                        onClick={() => {
+                            if (window.confirm('정말로 모든 데이터를 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+                                useStore.getState().resetData();
+                                alert('데이터가 초기화되었습니다.');
+                                window.location.reload();
+                            }
+                        }}
+                        style={{ width: '100%', padding: '0.8rem', background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+                    >
+                        전체 데이터 초기화
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };

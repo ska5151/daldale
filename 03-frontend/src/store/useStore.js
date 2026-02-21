@@ -167,7 +167,31 @@ const useStore = create(
             getExpenseById: (id) => {
                 const { expenses } = get();
                 return expenses.find(exp => exp.expense_id === Number(id));
-            }
+            },
+
+            // --- Backup & Restore Actions ---
+            resetData: () => set({
+                expenses: [],
+                expenseHistory: [],
+                categories: [
+                    { category_id: 1, name: '생활비', type: 'EXPENSE', sort_order: 1 },
+                    { category_id: 2, name: '통신비', type: 'EXPENSE', sort_order: 2 },
+                    { category_id: 3, name: '주거비', type: 'EXPENSE', sort_order: 3 },
+                ],
+                paymentMethods: [
+                    { payment_method_id: 1, name: '신용카드', type: 'CARD', color: '#6366f1' },
+                    { payment_method_id: 2, name: '체크카드', type: 'CARD', color: '#10b981' },
+                    { payment_method_id: 3, name: '현금', type: 'CASH', color: '#f59e0b' },
+                ],
+            }),
+
+            restoreData: (data) => set((state) => ({
+                expenses: data.expenses || state.expenses,
+                expenseHistory: data.expenseHistory || state.expenseHistory,
+                categories: data.categories || state.categories,
+                paymentMethods: data.paymentMethods || state.paymentMethods,
+                userProfile: data.userProfile ? { ...state.userProfile, ...data.userProfile } : state.userProfile
+            })),
         }),
         {
             name: 'daldale-storage', // name of the item in the storage (must be unique)
