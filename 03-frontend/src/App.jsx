@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
-import AuthPage from './pages/AuthPage';
 import Dashboard from './pages/Dashboard';
 import AddExpense from './pages/AddExpense';
 import Settings from './pages/Settings';

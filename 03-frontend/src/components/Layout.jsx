@@ -4,14 +4,6 @@ import './Layout.css';
 
 const Layout = () => {
     const location = useLocation();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            navigate('/');
-        }
-    }, [navigate]);
 
     return (
         <div className="app-container">
